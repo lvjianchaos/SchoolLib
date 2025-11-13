@@ -13,11 +13,13 @@ public interface BookMapper {
 
     Book findById(@Param("bookId") Integer bookId);
 
+    // (useGeneratedKeys 在 XML 中配置)
     int insert(Book book);
 
     int update(Book book);
 
     int deleteById(@Param("bookId") Integer bookId);
+
 
     /**
      * 原子化减库存

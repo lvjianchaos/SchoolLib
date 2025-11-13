@@ -52,4 +52,11 @@
             LIMIT 1
     </select>
 
+
+    <!-- 6. 查询所有记录 -->
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM BorrowRecord
+        ORDER BY BorrowDate DESC
+    </select>
+
 </mapper>

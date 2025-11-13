@@ -1,5 +1,7 @@
 package com.chaos.schoollib.service.impl;
 
+import com.chaos.schoollib.common.convention.errorcode.BaseErrorCode;
+import com.chaos.schoollib.common.convention.exception.ClientException;
 import com.chaos.schoollib.dto.UserLoginDTO;
 import com.chaos.schoollib.dto.UserRegisterDTO;
 import com.chaos.schoollib.entity.User;
@@ -17,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * (重构) AuthService
+ * - 抛出 ClientException
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -41,13 +47,13 @@ public class AuthServiceImpl implements AuthService {
     public Integer register(UserRegisterDTO registerDTO) {
         // 1. 检查用户名是否已存在
         if (userMapper.findByUsername(registerDTO.getUsername()) != null) {
-            throw new RuntimeException("Username is already taken!");
+            // (更新) 抛出 ClientException
+            throw new ClientException(BaseErrorCode.USER_NAME_EXIST_ERROR);
         }
 
         // 2. 创建新用户
         User user = new User();
         user.setUsername(registerDTO.getUsername());
-        // 3. 加密密码
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         user.setRole(registerDTO.getRole());
         user.setContact(registerDTO.getContact());
@@ -60,7 +66,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(UserLoginDTO loginDTO) {
-        // 1. 使用 AuthenticationManager 进行认证
+        // (不变) 登录失败 (密码错误等)
+        // 会被 AuthenticationManager 抛出 AuthenticationException
+        // 并由 GlobalExceptionHandler 捕获
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginDTO.getUsername(),
@@ -68,10 +76,7 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        // 2. 将认证信息设置到 SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // 3. 生成 JWT Token
         return tokenProvider.generateToken(authentication);
     }
 }

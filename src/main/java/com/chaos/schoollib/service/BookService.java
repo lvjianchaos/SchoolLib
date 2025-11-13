@@ -6,7 +6,7 @@ import com.chaos.schoollib.entity.Book;
 import java.util.List;
 
 /**
- * 图书管理业务逻辑接口
+ * 阶段二：图书管理业务逻辑接口
  */
 public interface BookService {
 

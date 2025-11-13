@@ -27,7 +27,7 @@ public interface BorrowRecordMapper {
     BorrowRecord findById(@Param("recordId") Integer recordId);
 
     /**
-     * 更新记录 (例如：还书时)
+     * 更新记录
      * @param record 记录
      * @return 受影响行数
      */
@@ -52,4 +52,9 @@ public interface BorrowRecordMapper {
             @Param("bookId") Integer bookId,
             @Param("status") String status
     );
+
+    /**
+     * 查询所有借阅记录 (管理员使用)
+     */
+    List<BorrowRecord> findAll();
 }

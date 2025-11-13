@@ -1,21 +1,22 @@
 package com.chaos.schoollib.controller;
 
+import com.chaos.schoollib.common.result.Result;
+import com.chaos.schoollib.common.result.Results;
 import com.chaos.schoollib.dto.BookDTO;
 import com.chaos.schoollib.entity.Book;
 import com.chaos.schoollib.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * 图书管理 RESTful API 控制器
+ * (重大更新) BookController
+ * - 返回 Result<T>
  */
 @RestController
-@RequestMapping("/api/books") // 所有请求都以 /api/books 为前缀
+@RequestMapping("/api/books")
 public class BookController {
 
     private final BookService bookService;
@@ -26,53 +27,48 @@ public class BookController {
     }
 
     /**
-     * 1. 创建新书 (POST /api/books)
-     * (限制此接口仅对 ADMIN 开放)
+     * 1. 创建新书
      */
     @PostMapping
-    public ResponseEntity<Book> createBook(@Valid @RequestBody BookDTO bookDTO) {
+    public Result<Book> createBook(@Valid @RequestBody BookDTO bookDTO) {
         Book createdBook = bookService.createBook(bookDTO);
-        // 返回 201 Created 状态，并在 body 中包含创建的资源
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
+        return Results.success(createdBook);
     }
 
     /**
-     * 2. 获取所有图书 (GET /api/books)
-     * (此接口将对所有人开放)
+     * 2. 获取所有图书
      */
     @GetMapping
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public Result<List<Book>> getAllBooks() {
         List<Book> books = bookService.getAllBooks();
-        return ResponseEntity.ok(books); // 返回 200 OK
+        return Results.success(books);
     }
 
     /**
-     * 3. 根据 ID 获取单本图书 (GET /api/books/{id})
+     * 3. 根据 ID 获取单本图书
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") Integer bookId) {
+    public Result<Book> getBookById(@PathVariable("id") Integer bookId) {
         Book book = bookService.getBookById(bookId);
-        return ResponseEntity.ok(book); // getBookById 内部会处理找不到的情况
+        return Results.success(book);
     }
 
     /**
-     * 4. 更新图书 (PUT /api/books/{id})
-     * (限制此接口仅对 ADMIN 开放)
+     * 4. 更新图书
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") Integer bookId,
-                                           @Valid @RequestBody BookDTO bookDTO) {
+    public Result<Book> updateBook(@PathVariable("id") Integer bookId,
+                                   @Valid @RequestBody BookDTO bookDTO) {
         Book updatedBook = bookService.updateBook(bookId, bookDTO);
-        return ResponseEntity.ok(updatedBook);
+        return Results.success(updatedBook);
     }
 
     /**
-     * 5. 删除图书 (DELETE /api/books/{id})
-     * (限制此接口仅对 ADMIN 开放)
+     * 5. 删除图书
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBook(@PathVariable("id") Integer bookId) {
+    public Result<Void> deleteBook(@PathVariable("id") Integer bookId) {
         bookService.deleteBook(bookId);
-        return ResponseEntity.noContent().build(); // 返回 204 No Content
+        return Results.success();
     }
 }

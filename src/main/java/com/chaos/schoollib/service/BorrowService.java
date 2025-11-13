@@ -30,4 +30,10 @@ public interface BorrowService {
      * @return 记录列表
      */
     List<BorrowRecord> getMyRecords(Integer userId);
+
+    /**
+     * 获取所有借阅记录 (管理员)
+     * @return 记录列表
+     */
+    List<BorrowRecord> getAllRecords();
 }
