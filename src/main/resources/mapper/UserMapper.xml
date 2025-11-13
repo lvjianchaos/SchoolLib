@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+  阶段三：UserMapper XML
+-->
+<mapper namespace="com.chaos.schoollib.mapper.UserMapper">
+
+    <!--
+      ResultMap: 用于 User 实体映射
+    -->
+    <resultMap id="BaseResultMap" type="com.chaos.schoollib.entity.User">
+        <id property="userID" column="UserID" />
+        <result property="username" column="Username" />
+        <result property="password" column="Password" />
+        <result property="role" column="Role" />
+        <result property="contact" column="Contact" />
+        <result property="registrationDate" column="RegistrationDate" />
+    </resultMap>
+
+    <!--
+      1. 根据用户名查找
+    -->
+    <select id="findByUsername" resultMap="BaseResultMap">
+        SELECT * FROM User WHERE Username = #{username}
+    </select>
+
+    <!--
+      2. 插入新用户
+    -->
+    <insert id="insert" parameterType="com.chaos.schoollib.entity.User"
+            useGeneratedKeys="true" keyProperty="userID">
+        INSERT INTO User (Username, Password, Role, Contact, RegistrationDate)
+        VALUES (#{username}, #{password}, #{role}, #{contact}, #{registrationDate})
+    </insert>
+
+</mapper>
