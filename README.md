@@ -1,6 +1,6 @@
 ## 图书借阅系统
 
-更新日期：11.14 -- 姚熙昂
+更新日期：11.30
 
 ### 1.项目设计
 
@@ -73,7 +73,7 @@ CREATE TABLE tag (
 
 用于建立图书与标签之间的**多对多关系**。一条记录代表本图书拥有某个标签。
 
-```
+```sql
 CREATE TABLE book_tag (
     id          BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
     book_id     BIGINT UNSIGNED NOT NULL COMMENT '图书ID',
@@ -295,6 +295,10 @@ CREATE TABLE reservation (
 ##### 3.2.5 删除图书
 
 已经实现。该功能只能支持role为teacher和admin的用户。
+
+##### 3.2.6 图书评论
+
+用户新增图书评论。
 
 #### 3.3 图书借阅
 
